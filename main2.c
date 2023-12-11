@@ -139,8 +139,9 @@ void hitungN(struct roomLighting *ruangan, float *watt)
 
     printf(" Banyak lampu yang perlu Anda beli adalah sebanyak %.2f buah.\n", roundf(ruangan->N));
 
-    if (ruangan->N >= 10.00) {
+    if (ruangan->N > 10.00) {
         printf(" Kami menyarankan Anda untuk membeli lampu dengan daya yang lebih besar agar pencahayaan dan penempatan pemasangan lampu yang lebih efisien");
+        printf(" Anda bisa menggunakan lampu dengan watt sebesar %f", *watt * roundf(ruangan->N) / 10);
     }
 }
 
