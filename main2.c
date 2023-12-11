@@ -117,7 +117,6 @@ void hitungLampu(struct roomLighting *ruangan, float *watt)
     printf("\n\n");
     printf("===========================================\n");
     printf("| Menghitung Banyak Lampu yang Dibutuhkan |\n");
-    printf("|           dan Komparasi Lampu           |\n");
     printf("===========================================\n");
     printf(" Masukkan panjang ruangan (dalam meter): ");
     scanf("%f", &ruangan->panjang);
