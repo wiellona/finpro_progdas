@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
+#include <Windows.h>
 
 struct roomLighting
 {
@@ -9,13 +10,23 @@ struct roomLighting
     float penerangan;     // Pencahayaan yang diinginkan (dalam lux)
     float UF;             // utilization factor
     float N;              // Banyak lampu yang dibutuhkan
-    void (*setData)(struct roomLighting *ruangan);
-    void (*hitungRI)(struct roomLighting *ruangan);
-    void (*hitungN)(struct roomLighting *ruangan);
 };
 
+
+void hitungLampu(struct roomLighting *ruangan, float *watt);
+void hitungN(struct roomLighting *ruangan, float *watt);
+void masuk();
+void penjelasanProgram();
+void keluar();
+void menu();
+void dataRuang();
+
+// Tabel utilization factor sebagai salah satu variabel yang diperlukan dalam perhitungan
 void utilizationFactor()
 {
+    printf("\n");
+    printf("Cara membaca tabel\n");
+    printf("Pertama-tama, Anda perlu mengetahui nilai reflektansi atap, reflektansi dinding, dan room index (RI) ruangan Anda. Contoh: Reflektansi atap ruangan A adalah 0.7, reflektansi dindingnya 0.1, dan room indexnya 1.25, maka nilai utilization Factornya adalah 0.50\n");
     printf("===========================================================================================\n");
     printf("|                                Utilization Factor Table                                 |\n");
     printf("===========================================================================================\n");
@@ -43,37 +54,46 @@ void utilizationFactor()
 int main(void)
 {
     struct roomLighting *ruangan = (struct roomLighting *)malloc(sizeof(struct roomLighting));
-    int choice, n = 1;
+    int choice;
     float watt;
     masuk();
-    menu();
 
-    printf(" Masukkan nomor menu pilihan Anda : ");
-    scanf("%d", &choice);
-
-    switch (choice)
+    do
     {
-    case 1:
-        hitungLampu(ruangan, &watt);
-        hitungN(ruangan, &watt);
-        break;
-    case 2:
-        dataRuang();
-        break;
-    case 3:
-        utilizationFactor();
-        break;
-    case 4:
-        keluar();
-        break;
-    default:
-        break;
-    }
+        menu();
+
+        printf(" Masukkan nomor menu pilihan Anda : ");
+        scanf("%d", &choice);
+
+        switch (choice)
+        {
+        case 1:
+            penjelasanProgram();
+            break;
+        case 2:
+            hitungLampu(ruangan, &watt);
+            hitungN(ruangan, &watt);
+            break;
+        case 3:
+            dataRuang();
+            break;
+        case 4:
+            utilizationFactor();
+            break;
+        case 5:
+            keluar();
+            break;
+        default:
+            printf("Input yang Anda masukkan tidak valid. Silahkan masukkan angka 1-4");
+            break;
+        }
+    } while (choice != 5);
 }
 
 // Display menu utama
 void menu()
 {
+    printf("\n");
     printf("=========================================\n"
            "|                                       |\n"
            "|       Lamp Efficiency Calculator      |\n"
@@ -82,47 +102,36 @@ void menu()
            "=========================================\n"
            "|              Menu utama               |\n"
            "|                                       |\n"
-           "|  1. Hitung jumlah lampu yang          |\n"
+           "|  1. Penjelasan program                |\n"
+           "|  2. Hitung jumlah lampu yang          |\n"
            "|     dibutuhkan                        |\n"
-           "|  2. Data kebutuhan lampu tiap ruang   |\n"
-           "|  3. Utilization Factor Table          |\n"
-           "|  4. Keluar                            |\n"
+           "|  3. Data kebutuhan lampu tiap ruang   |\n"
+           "|  4. Utilization Factor Table          |\n"
+           "|  5. Keluar                            |\n"
            "=========================================\n");
 }
 
+// Function untuk meminta pengguna memasukkan variabel yang dibutuhkan dalam perhitungan
 void hitungLampu(struct roomLighting *ruangan, float *watt)
 {
-    char respon;
+    printf("\n");
     printf("===========================================\n");
     printf("| Menghitung Banyak Lampu yang Dibutuhkan |\n");
     printf("|           dan Komparasi Lampu           |\n");
     printf("===========================================\n");
     printf(" Masukkan panjang ruangan (dalam meter): ");
-    scanf("%f\n", &ruangan->panjang);
-    printf(" Masukkan lebar ruangan : ");
-    scanf("%f\n", &ruangan->lebar);
+    scanf("%f", &ruangan->panjang);
+    printf(" Masukkan lebar ruangan (dalam meter): ");
+    scanf("%f", &ruangan->lebar);
     printf(" Pencahayaan yang dibutuhkan : ");
-    scanf("%f\n", &ruangan->penerangan);
-
-    printf("Apakah Anda mengetahui nilai UF dari ruangan? Ketik 'YA' atau 'TIDAK'\n");
-    scanf("%s\n", &respon);
-
-    if (respon == 'YA')
-    {
-        utilizationFactor();
-        printf(" Utilization Factor ruangan : ");
-        scanf("%f\n", &ruangan->UF);
-    }
-    else
-    {
-        printf(" Utilization Factor ruangan : ");
-        scanf("%f\n", &ruangan->UF);
-    }
-
+    scanf("%f", &ruangan->penerangan);
+    printf(" Utilization Factor ruangan : ");
+    scanf("%f", &ruangan->UF);
     printf(" Masukkan besar daya lampu : ");
-    scanf("%f\n", watt);
+    scanf("%f", watt);
 }
 
+// Funtion untuk menghitung banyaknya lampu yang perlu dibeli untuk memenuhi kebutuhan pencahayaan
 void hitungN(struct roomLighting *ruangan, float *watt)
 {
     ruangan->N = (ruangan->penerangan * ruangan->panjang * ruangan->lebar) / (*watt * 10 * ruangan->UF * 0.75);
@@ -131,8 +140,10 @@ void hitungN(struct roomLighting *ruangan, float *watt)
     printf(" Banyak lampu yang perlu Anda beli adalah sebanyak %.2f buah.\n", roundf(ruangan->N));
 }
 
+// Tabel data kebutuhan penerangan suatu ruangan secara umum
 void dataRuang()
 {
+    printf("\n");
     printf("===========================================\n");
     printf("|    Data Kebutuhan Lampu Tiap Ruangan    |\n");
     printf("===========================================\n");
@@ -146,29 +157,36 @@ void dataRuang()
     printf("===========================================\n");
 }
 
+// Penjelasan program
+void penjelasanProgram() {
+    printf("Program ini berfungsi untuk membantu Anda menentukan berapa banyak bohlam lampu yang perlu Anda beli untuk keperluan penerangan ruangan Anda. Program akan meminta beberapa input dari Anda, seperti panjang dan lebar ruangan,tingkat pencahayaan yang dibutuhkan (dalam lux), besar daya lampu yang hendak Anda beli, dan Utilization Factor. Anda dapat melihat perkiraan tingkat pencahayaan yang dibutuhkan pada menu 3 dan Utilization Factor pada menu 4.");
+}
+
+// Function tampilan awal layar
 void masuk()
 {
+    printf("\n");
     printf("======================================\n"
            "|     Selamat Datang Di Aplikasi     |\n"
            "|     Lamp Efficiency Calculator     |\n"
            "|             Kelompok 9             |\n"
            "|        Pemrograman Dasar 01        |\n"
            "======================================\n");
-    int i;
     printf("!--- Tekan ENTER untuk memulai aplikasi ---!");
     getchar();
-    sleep(1);
+    Sleep(1);
     system("CLS"); // Membersihkan layar
 }
 
+// Function tampilan program selesai
 void keluar()
 {
     system("CLS"); // Membersihkan layar
-    sleep(1);
+    Sleep(1);
     printf("\n\n\n\n\n\n\n");
     printf("\t\t\t\t\t\t\t\t======================================\n");
     printf("\t\t\t\t\t\t\t\t|~ ~ ~ ~ ~ ~ ~ ~ Keluar ~ ~ ~ ~ ~ ~ ~ ~|\n");
     printf("\t\t\t\t\t\t\t\t======================================\n\n");
-    sleep(1);    // menjeda program selama 1.6 detik
+    Sleep(1);      // menjeda program selama 1.6 detik
     system("CLS"); // Membersihkan layar
 }
