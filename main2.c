@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include <string.h>
 #include <Windows.h>
 
 struct roomLighting
@@ -24,9 +23,10 @@ void dataRuang();
 // Tabel utilization factor sebagai salah satu variabel yang diperlukan dalam perhitungan
 void utilizationFactor()
 {
-    printf("\n");
+    printf("\n\n");
     printf("Cara membaca tabel\n");
-    printf("Pertama-tama, Anda perlu mengetahui nilai reflektansi atap, reflektansi dinding, dan room index (RI) ruangan Anda. Contoh: Reflektansi atap ruangan A adalah 0.7, reflektansi dindingnya 0.1, dan room indexnya 1.25, maka nilai utilization Factornya adalah 0.50\n");
+    printf("Pertama-tama, Anda perlu mengetahui nilai reflektansi atap, reflektansi dinding, dan room index (RI) ruangan Anda.\n"); 
+    printf("Contoh: Reflektansi atap ruangan A adalah 0.7, reflektansi dindingnya 0.1, dan room indexnya 1.25, maka nilai utilization Factornya adalah 0.50\n\n");
     printf("===========================================================================================\n");
     printf("|                                Utilization Factor Table                                 |\n");
     printf("===========================================================================================\n");
@@ -93,7 +93,7 @@ int main(void)
 // Display menu utama
 void menu()
 {
-    printf("\n");
+    printf("\n\n");
     printf("=========================================\n"
            "|                                       |\n"
            "|       Lamp Efficiency Calculator      |\n"
@@ -114,7 +114,7 @@ void menu()
 // Function untuk meminta pengguna memasukkan variabel yang dibutuhkan dalam perhitungan
 void hitungLampu(struct roomLighting *ruangan, float *watt)
 {
-    printf("\n");
+    printf("\n\n");
     printf("===========================================\n");
     printf("| Menghitung Banyak Lampu yang Dibutuhkan |\n");
     printf("|           dan Komparasi Lampu           |\n");
@@ -123,11 +123,11 @@ void hitungLampu(struct roomLighting *ruangan, float *watt)
     scanf("%f", &ruangan->panjang);
     printf(" Masukkan lebar ruangan (dalam meter): ");
     scanf("%f", &ruangan->lebar);
-    printf(" Pencahayaan yang dibutuhkan : ");
+    printf(" Pencahayaan yang dibutuhkan (dalam lux) : ");
     scanf("%f", &ruangan->penerangan);
     printf(" Utilization Factor ruangan : ");
     scanf("%f", &ruangan->UF);
-    printf(" Masukkan besar daya lampu : ");
+    printf(" Masukkan besar daya lampu (dalam watt) : ");
     scanf("%f", watt);
 }
 
@@ -138,12 +138,16 @@ void hitungN(struct roomLighting *ruangan, float *watt)
     roundf(ruangan->N); // lampu->watt * 10 untuk mengoversi terang lampu dari lumen ke watt
 
     printf(" Banyak lampu yang perlu Anda beli adalah sebanyak %.2f buah.\n", roundf(ruangan->N));
+
+    if (ruangan->N >= 10.00) {
+        printf(" Kami menyarankan Anda untuk membeli lampu dengan daya yang lebih besar agar pencahayaan dan penempatan pemasangan lampu yang lebih efisien");
+    }
 }
 
 // Tabel data kebutuhan penerangan suatu ruangan secara umum
 void dataRuang()
 {
-    printf("\n");
+    printf("\n\n");
     printf("===========================================\n");
     printf("|    Data Kebutuhan Lampu Tiap Ruangan    |\n");
     printf("===========================================\n");
@@ -159,13 +163,17 @@ void dataRuang()
 
 // Penjelasan program
 void penjelasanProgram() {
-    printf("Program ini berfungsi untuk membantu Anda menentukan berapa banyak bohlam lampu yang perlu Anda beli untuk keperluan penerangan ruangan Anda. Program akan meminta beberapa input dari Anda, seperti panjang dan lebar ruangan,tingkat pencahayaan yang dibutuhkan (dalam lux), besar daya lampu yang hendak Anda beli, dan Utilization Factor. Anda dapat melihat perkiraan tingkat pencahayaan yang dibutuhkan pada menu 3 dan Utilization Factor pada menu 4.");
+    printf("\n\n");
+    printf("\nProgram ini berfungsi untuk membantu Anda menentukan berapa banyak bohlam lampu yang perlu Anda beli untuk keperluan penerangan ruangan Anda.\n");
+    printf("Program akan meminta beberapa input dari Anda, seperti panjang dan lebar ruangan,tingkat pencahayaan yang dibutuhkan (dalam lux), \n");
+    printf("besar daya lampu yang hendak Anda beli, dan Utilization Factor. Anda dapat melihat perkiraan tingkat pencahayaan yang dibutuhkan pada menu 3 dan Utilization Factor pada menu 4.");
+    printf("\n\n");
 }
 
 // Function tampilan awal layar
 void masuk()
 {
-    printf("\n");
+    printf("\n\n");
     printf("======================================\n"
            "|     Selamat Datang Di Aplikasi     |\n"
            "|     Lamp Efficiency Calculator     |\n"
